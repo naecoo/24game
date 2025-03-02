@@ -82,12 +82,12 @@ function App() {
             <h2 className="text-lg font-semibold text-gray-900">
               找到 {results.length} 个解决方案：
             </h2>
-            <div className="bg-gray-50 rounded-md p-4">
+            <div className="bg-gray-50 rounded-md p-2">
               <ul className="space-y-2 list-disc list-inside">
                 {results.map((result, index) => (
-                  <li key={index} className="text-gray-700">
+                  <ol key={index} className="text-gray-700">
                     {result} = 24
-                  </li>
+                  </ol>
                 ))}
               </ul>
             </div>
