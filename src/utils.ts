@@ -9,19 +9,34 @@ export function calculate(numbers: number[]): string[] {
   if (new Set(numbers).size !== 4) {
     return [];
   }
+  for (const num of numbers) {
+    if (!Number.isInteger(num) || num < 1 || num > 9) {
+      return [];
+    }
+  }
 
   const results = new Set<string>();
   const operators = ["+", "-", "*", "/"];
   const perms = permute(numbers);
+  const seen = new Set<string>();
 
   for (const perm of perms) {
     const [a, b, c, d] = perm;
     for (const op1 of operators) {
       for (const op2 of operators) {
         for (const op3 of operators) {
+          // 对于加法和乘法，确保较小的数在前面
+          if ((op1 === '+' || op1 === '*') && a > b) continue;
+          if ((op2 === '+' || op2 === '*') && b > c) continue;
+          if ((op3 === '+' || op3 === '*') && c > d) continue;
+
           const checkAndAdd = (result: number | null, expr: string) => {
             if (result !== null && Math.abs(result - 24) < 1e-6) {
-              results.add(`${expr} = 24`);
+              const key = `${a}${op1}${b}${op2}${c}${op3}${d}`;
+              if (!seen.has(key)) {
+                seen.add(key);
+                results.add(`${expr.replace(/\*/g, '×').replace(/\//g, '÷')} = 24`);
+              }
             }
           };
 
